@@ -22,7 +22,6 @@ void ATankPlayerController::BeginPlay()
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FVector HitLocation;
 	AimAtCrosshair();
 }
 
@@ -73,13 +72,13 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
 		Parameters,
 		FCollisionResponseParams::DefaultResponseParam
 	);
+
 	HitLocation = FVector(0.f);
+
 	//Parsing Results
 	if (IsHit)
 	{
 		HitLocation = HitResult.Location;
-		//UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *HitResult.GetActor()->GetName());	
-		//UE_LOG(LogTemp, Warning, TEXT("Hit at: %s"), *HitResult.Location.ToString());
 	}
 	return IsHit;
 }
