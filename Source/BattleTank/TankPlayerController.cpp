@@ -22,9 +22,8 @@ void ATankPlayerController::BeginPlay()
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AimAtCrosshair();
 	FVector HitLocation;
-	GetSightRayHitLocation(HitLocation);
+	AimAtCrosshair();
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
@@ -36,7 +35,8 @@ void ATankPlayerController::AimAtCrosshair()
 {
 	if (!ControlledTank) { return; }
 	FVector HitLocation;
-	//UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());
+	GetSightRayHitLocation(HitLocation);
+	ControlledTank->AimAt(HitLocation);
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
@@ -73,14 +73,13 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
 		Parameters,
 		FCollisionResponseParams::DefaultResponseParam
 	);
-
+	HitLocation = FVector(0.f);
 	//Parsing Results
 	if (IsHit)
 	{
 		HitLocation = HitResult.Location;
-		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *HitResult.GetActor()->GetName());	
-		UE_LOG(LogTemp, Warning, TEXT("Hit at: %s"), *HitResult.Location.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *HitResult.GetActor()->GetName());	
+		//UE_LOG(LogTemp, Warning, TEXT("Hit at: %s"), *HitResult.Location.ToString());
 	}
-	HitLocation = FVector(0.f);
 	return IsHit;
 }
