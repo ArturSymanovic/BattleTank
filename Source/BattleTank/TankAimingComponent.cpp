@@ -9,14 +9,25 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	
-	// ...
+	//Barrel = GetOwner()->FindComponentByClass<UStaticMeshComponent>();
+	/*if (!Barrel)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Barrel not found."))
+	*/
 }
+	
 
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"), *GetOwner()->GetName(), *HitLocation.ToString());
+	UE_LOG(
+		LogTemp,
+		Warning, 
+		TEXT("%s aiming at %s from %s"),
+		*GetOwner()->GetName(),
+		*HitLocation.ToString(),
+		*Barrel->GetComponentLocation().ToString()
+	);
 }
 
 // Called when the game starts
@@ -35,5 +46,10 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+{
+	Barrel = BarrelToSet;
 }
 
