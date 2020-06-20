@@ -15,7 +15,6 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 	void AimAt(FVector HitLocation, float LaunchSpeed);
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -26,5 +25,5 @@ public:
 	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
 private:
 	UStaticMeshComponent* Barrel = nullptr;
-		
+	void MoveBarrelTo(FVector AimDirection);
 };

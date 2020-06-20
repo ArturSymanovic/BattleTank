@@ -25,8 +25,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	FVector LaunchVelocity = FVector(0.f);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	
-	
-	if (UGameplayStatics::SuggestProjectileVelocity(
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		LaunchVelocity,
 		StartLocation,
@@ -39,28 +38,23 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		FCollisionResponseParams(),
 		TArray<AActor*>({ GetOwner() }),
 		false
-	))
+	);
+
+	if (bHaveAimSolution)
 	{
-		UE_LOG(
-			LogTemp,
-			Warning,
-			TEXT("%s aiming at %s from %s. Calculated launch velocity: %s"),
-			*GetOwner()->GetName(),
-			*HitLocation.ToString(),
-			*StartLocation.ToString(),
-			*LaunchVelocity.GetSafeNormal().ToString()
-		);
+		FVector AimDirection = LaunchVelocity.GetSafeNormal();
+		MoveBarrelTo(AimDirection);
+
+		//UE_LOG(
+		//	LogTemp,
+		//	Warning,
+		//	TEXT("%s aiming at %s from %s. Calculated launch velocity: %s"),
+		//	*GetOwner()->GetName(),
+		//	*HitLocation.ToString(),
+		//	*StartLocation.ToString(),
+		//	*AimDirection.ToString()
+		//);
 	}
-
-
-	//UE_LOG(
-	//	LogTemp,
-	//	Warning, 
-	//	TEXT("%s aiming at %s from %s"),
-	//	*GetOwner()->GetName(),
-	//	*HitLocation.ToString(),
-	//	*Barrel->GetComponentLocation().ToString()
-	//);
 }
 
 // Called when the game starts
@@ -84,5 +78,14 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
 {
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::MoveBarrelTo(FVector AimDirection)
+{
+	FRotator BarrelRotation = Barrel->GetForwardVector().Rotation();
+	FRotator AimAsRotator = AimDirection.Rotation();
+	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString());
+
+
 }
 
