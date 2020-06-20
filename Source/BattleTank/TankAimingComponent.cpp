@@ -1,5 +1,6 @@
 // Copyright Artur Symanovic 2020
 
+#include "TankBarrel.h"
 #include "Engine/Classes/Kismet/GameplayStatics.h"
 #include "TankAimingComponent.h"
 
@@ -75,7 +76,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
@@ -86,6 +87,7 @@ void UTankAimingComponent::MoveBarrelTo(FVector AimDirection)
 	FRotator AimAsRotator = AimDirection.Rotation();
 	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString());
 
-
+	FRotator DeltaRotation = AimAsRotator - BarrelRotation;
+	Barrel->Elevate(5); //TODO remove magic number
 }
 
