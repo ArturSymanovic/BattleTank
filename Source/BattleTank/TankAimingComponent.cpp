@@ -1,6 +1,6 @@
 // Copyright Artur Symanovic 2020
 
-
+#include "Engine/Classes/Kismet/GameplayStatics.h"
 #include "TankAimingComponent.h"
 
 // Sets default values for this component's properties
@@ -18,16 +18,49 @@ UTankAimingComponent::UTankAimingComponent()
 	
 
 
-void UTankAimingComponent::AimAt(FVector HitLocation)
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	UE_LOG(
-		LogTemp,
-		Warning, 
-		TEXT("%s aiming at %s from %s"),
-		*GetOwner()->GetName(),
-		*HitLocation.ToString(),
-		*Barrel->GetComponentLocation().ToString()
-	);
+	if (!Barrel) { return; }
+
+	FVector LaunchVelocity = FVector(0.f);
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	
+	
+	if (UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		LaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		false,
+		5.f,
+		false,
+		ESuggestProjVelocityTraceOption::DoNotTrace,
+		FCollisionResponseParams(),
+		TArray<AActor*>({ GetOwner() }),
+		false
+	))
+	{
+		UE_LOG(
+			LogTemp,
+			Warning,
+			TEXT("%s aiming at %s from %s. Calculated launch velocity: %s"),
+			*GetOwner()->GetName(),
+			*HitLocation.ToString(),
+			*StartLocation.ToString(),
+			*LaunchVelocity.GetSafeNormal().ToString()
+		);
+	}
+
+
+	//UE_LOG(
+	//	LogTemp,
+	//	Warning, 
+	//	TEXT("%s aiming at %s from %s"),
+	//	*GetOwner()->GetName(),
+	//	*HitLocation.ToString(),
+	//	*Barrel->GetComponentLocation().ToString()
+	//);
 }
 
 // Called when the game starts
