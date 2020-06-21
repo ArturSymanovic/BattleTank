@@ -11,16 +11,13 @@ UTankAimingComponent::UTankAimingComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	//Barrel = GetOwner()->FindComponentByClass<UStaticMeshComponent>();
-	/*if (!Barrel)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Barrel not found."))
-	*/
 }
 	
 
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
+	
 	if (!Barrel) { return; }
 
 	FVector LaunchVelocity = FVector(0.f);
@@ -46,15 +43,19 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		FVector AimDirection = LaunchVelocity.GetSafeNormal();
 		MoveBarrelTo(AimDirection);
 
-		//UE_LOG(
-		//	LogTemp,
-		//	Warning,
-		//	TEXT("%s aiming at %s from %s. Calculated launch velocity: %s"),
-		//	*GetOwner()->GetName(),
-		//	*HitLocation.ToString(),
-		//	*StartLocation.ToString(),
-		//	*AimDirection.ToString()
-		//);
+		/*UE_LOG(
+			LogTemp,
+			Warning,
+			TEXT("%s aiming at %s from %s. Calculated launch velocity: %s"),
+			*GetOwner()->GetName(),
+			*HitLocation.ToString(),
+			*StartLocation.ToString(),
+			*AimDirection.ToString()
+		);*/
+	}
+	else 
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Solution!!!!!!."))
 	}
 }
 
@@ -62,9 +63,10 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
+/*	if (!Barrel)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Barrel not found."))
+	}*/	
 }
 
 
@@ -84,10 +86,12 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 void UTankAimingComponent::MoveBarrelTo(FVector AimDirection)
 {
 	FRotator BarrelRotation = Barrel->GetForwardVector().Rotation();
+	//UE_LOG(LogTemp, Warning, TEXT("Barrel forward vector: %s"), *BarrelRotation.ToString());
 	FRotator AimAsRotator = AimDirection.Rotation();
-	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("AimDirection: %s"), *AimAsRotator.ToString());
 
 	FRotator DeltaRotation = AimAsRotator - BarrelRotation;
-	Barrel->Elevate(5); //TODO remove magic number
+	//UE_LOG(LogTemp, Warning, TEXT("DeltaRotation: %s"), *DeltaRotation.ToString());
+	Barrel->Elevate(DeltaRotation.Pitch);
 }
 
