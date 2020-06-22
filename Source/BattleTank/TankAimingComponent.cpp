@@ -22,7 +22,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if (!Barrel || !Turret) { return; }
 
 	FVector LaunchVelocity = FVector(0.f);
-	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	FVector StartLocation = Turret->GetSocketLocation(FName("Projectile"));
 	
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
@@ -31,7 +31,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		HitLocation,
 		LaunchSpeed,
 		false,
-		5.f,
+		0.f,
 		false,
 		ESuggestProjVelocityTraceOption::DoNotTrace,
 		FCollisionResponseParams(),
@@ -42,21 +42,22 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if (bHaveAimSolution)
 	{
 		FVector AimDirection = LaunchVelocity.GetSafeNormal();
+		//FVector AimDirection = LaunchVelocity;
 		MoveBarrelTo(AimDirection);
 
-		/*UE_LOG(
-			LogTemp,
-			Warning,
-			TEXT("%s aiming at %s from %s. Calculated launch velocity: %s"),
-			*GetOwner()->GetName(),
-			*HitLocation.ToString(),
-			*StartLocation.ToString(),
-			*AimDirection.ToString()
-		);*/
+		//UE_LOG(
+		//	LogTemp,
+		//	Warning,
+		//	TEXT("%s aiming at %s from %s. Calculated launch velocity: %s"),
+		//	*GetOwner()->GetName(),
+		//	*HitLocation.ToString(),
+		//	*StartLocation.ToString(),
+		//	*AimDirection.ToString()
+		//);
 	}
 	else 
 	{
-		UE_LOG(LogTemp, Error, TEXT("No Solution!!!!!!."))
+		//UE_LOG(LogTemp, Error, TEXT("No Solution!!!!!!."))
 	}
 }
 

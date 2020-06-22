@@ -15,6 +15,7 @@ void ATankAIController::Tick(float DeltaTime)
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn<ATank>();
 
 	if (!PlayerTank) { return; }
+	//UE_LOG(LogTemp, Warning, TEXT("Aiming"));
 	ControlledTank->AimAt(PlayerTank->GetActorLocation());
 	ControlledTank->Fire();
 }
