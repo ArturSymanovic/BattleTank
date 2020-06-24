@@ -25,9 +25,7 @@ void ATankAIController::Tick(float DeltaTime)
 		0,
 		true
 	);
-	//UE_LOG(LogTemp, Warning, TEXT("PathResult: %s"), PathResult)
 
-	//UE_LOG(LogTemp, Warning, TEXT("Aiming"));
 	ControlledTank->AimAt(PlayerTank->GetActorLocation());
 	ControlledTank->Fire();
 }

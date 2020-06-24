@@ -18,8 +18,6 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 protected:
-
-
 	UFUNCTION(BlueprintCallable)
 	ATank* GetControlledTank();
 
