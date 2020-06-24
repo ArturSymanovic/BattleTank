@@ -27,7 +27,7 @@ void UTankMovementComponent::IntendTurnLeft(float Throw)
 	RightTrack->SetThrottle(Throw);
 }
 
-void UTankMovementComponent::Init(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
+void UTankMovementComponent::InitialiseTracks(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
 	if (!LeftTrackToSet || !RightTrackToSet) { return; }
 	LeftTrack = LeftTrackToSet;

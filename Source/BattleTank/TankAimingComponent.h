@@ -34,6 +34,11 @@ protected:
 	EFiringState FiringState = EFiringState::Reloading;
 
 public:	
+
+	UFUNCTION(BlueprintCallable)
+	void InitialiseTurretAndBarrel(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet);
+
+
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void SetBarrelReference(UTankBarrel* BarrelToSet);

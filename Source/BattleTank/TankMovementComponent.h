@@ -31,7 +31,7 @@ public:
 	void IntendTurnLeft(float Throw);
 
 	UFUNCTION(BlueprintCallable)
-	void Init(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
+	void InitialiseTracks(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
 
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
