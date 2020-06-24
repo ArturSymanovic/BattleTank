@@ -29,7 +29,7 @@ void UTankMovementComponent::IntendTurnLeft(float Throw)
 
 void UTankMovementComponent::InitialiseTracks(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
-	if (!LeftTrackToSet || !RightTrackToSet) { return; }
+	if (!ensureMsgf((LeftTrackToSet && RightTrackToSet), TEXT("%s: Tracks not found"), *GetOwner()->GetName())) { return; }
 	LeftTrack = LeftTrackToSet;
 	RightTrack = RightTrackToSet;
 }

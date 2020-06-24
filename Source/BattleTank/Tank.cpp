@@ -17,7 +17,7 @@ ATank::ATank()
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();	
 }
 
 // Called every frame
@@ -35,27 +35,33 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATank::AimAt(FVector HitLocation)
 {
 	auto AimingComponent = FindComponentByClass<UTankAimingComponent>();
-	if (!AimingComponent) return;
+	if (!ensureMsgf(AimingComponent, TEXT("%s: Aiming component is not found"), *GetName())) { return; }
 	AimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Fire()
 {
 	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	
 	auto Barrel = FindComponentByClass<UTankBarrel>();
-	if (!Barrel) { return; }
+	if (!ensureMsgf(Barrel, TEXT("%s: Barrel not found"), *GetName())) { return; }
+
+	auto AimingComponent = FindComponentByClass<UTankAimingComponent>();
+	if (!ensureMsgf(AimingComponent, TEXT("%s: Aiming Component not found"), *GetName())) { return; }
+	
 	if (!IsReloaded)
 	{
-		//TODO Show Reload Animation
+
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Firing"));
+
 	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 		ProjectileBlueprint,
 		Barrel->GetSocketLocation(FName("Projectile")),
 		Barrel->GetSocketRotation(FName("Projectile"))
 	);
 	Projectile->LaunchProjectile(LaunchSpeed);
+	AimingComponent->FiringState = EFiringState::Reloading;
 	LastFireTime = FPlatformTime::Seconds();
 }
 

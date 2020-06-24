@@ -27,7 +27,10 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::LaunchProjectile(float Speed)
 {
 	auto Time = GetWorld()->GetTimeSeconds();
-	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
-	ProjectileMovementComponent->Activate();
+	if (ensureMsgf(ProjectileMovementComponent, TEXT("Missing Projectile Movement Component!")))
+	{
+		ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
+		ProjectileMovementComponent->Activate();
+	}	
 }
 

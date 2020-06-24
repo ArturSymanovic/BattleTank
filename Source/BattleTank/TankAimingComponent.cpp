@@ -15,6 +15,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	
 	if (!Barrel || !Turret) { return; }
+	if (!ensureMsgf((Barrel && Turret), TEXT("%s: Barrel or turret not found"), *GetOwner()->GetName())) { return; }
 
 	FVector LaunchVelocity = FVector(0.f);
 	FVector StartLocation = Turret->GetSocketLocation(FName("Projectile"));
@@ -48,7 +49,7 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::InitialiseTurretAndBarrel(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet)
 {
-	if (!TurretToSet || !BarrelToSet) { return; }
+	if (!ensureMsgf((BarrelToSet && TurretToSet), TEXT("%s: Barrel or turret not found"), *GetOwner()->GetName())) { return; }
 	Turret = TurretToSet;
 	Barrel = BarrelToSet;
 }

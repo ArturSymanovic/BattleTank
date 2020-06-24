@@ -12,9 +12,9 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	auto ControlledTank = GetPawn<ATank>();
-	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn<ATank>();
 
-	if (!PlayerTank) { return; }
+	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn<ATank>();
+	if (!ensureMsgf(PlayerTank, TEXT("%s: Player tank not found"), *GetName())) { return; }
 
 	auto PathResult = MoveToActor(
 		PlayerTank,
