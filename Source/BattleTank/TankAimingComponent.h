@@ -34,6 +34,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Reloading;
 
+	bool IsBarrelMoving();
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -50,7 +53,7 @@ private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
-	void MoveBarrelTo(FVector AimDirection);
+	void MoveBarrelTo();
 
 	UPROPERTY(EditAnywhere, Category = "Firing")
 	float LaunchSpeed = 4000.f;
@@ -62,4 +65,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	FVector AimDirection = FVector{0.f};
 };

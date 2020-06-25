@@ -15,6 +15,8 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	LastFireTime = FPlatformTime::Seconds();
 }
 
 void UTankAimingComponent::InitialiseTurretAndBarrel(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet)
@@ -27,6 +29,20 @@ void UTankAimingComponent::InitialiseTurretAndBarrel(UTankTurret* TurretToSet, U
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	{
+		FiringState = EFiringState::Reloading;
+	}
+	else if (IsBarrelMoving())
+	{
+		FiringState = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringState = EFiringState::Locked;
+	}
+
+
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -55,12 +71,12 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 	if (bHaveAimSolution)
 	{
-		FVector AimDirection = LaunchVelocity.GetSafeNormal();
-		MoveBarrelTo(AimDirection);
+		AimDirection = LaunchVelocity.GetSafeNormal();
+		MoveBarrelTo();
 	}
 }
 
-void UTankAimingComponent::MoveBarrelTo(FVector AimDirection)
+void UTankAimingComponent::MoveBarrelTo()
 {
 	FRotator BarrelRotation = Barrel->GetForwardVector().Rotation();
 	FRotator AimAsRotator = AimDirection.Rotation();
@@ -74,8 +90,8 @@ void UTankAimingComponent::Fire()
 	if (!ensureMsgf(Barrel, TEXT("%s: Barrel not found"), *GetName())) { return; }
 	if (!ensureMsgf(ProjectileBlueprint, TEXT("%s: Projectileblueprint not found"), *GetName())) { return; }
 
-	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (!IsReloaded) { return; }
+	
+	if (FiringState == EFiringState::Reloading) { return; }
 
 	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 		ProjectileBlueprint,
@@ -83,6 +99,11 @@ void UTankAimingComponent::Fire()
 		Barrel->GetSocketRotation(FName("Projectile"))
 		);
 	Projectile->LaunchProjectile(LaunchSpeed);
-	FiringState = EFiringState::Reloading;
 	LastFireTime = FPlatformTime::Seconds();
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensureMsgf(Barrel, TEXT("%s: Barrel not found"), *GetName())) { return false; }
+	return !Barrel->GetForwardVector().Equals(AimDirection, 0.1);
 }

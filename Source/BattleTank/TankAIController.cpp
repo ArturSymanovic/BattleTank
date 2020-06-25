@@ -28,9 +28,13 @@ void ATankAIController::Tick(float DeltaTime)
 		true
 	);
 	
-	auto AimingCpmponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
-	if (!ensureMsgf(AimingCpmponent, TEXT("%s: Aiming component not found"), *GetName())) { return; }
+	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	if (!ensureMsgf(AimingComponent, TEXT("%s: Aiming component not found"), *GetName())) { return; }
 
-	AimingCpmponent->AimAt(PlayerTank->GetActorLocation());
-	AimingCpmponent->Fire();
+	AimingComponent->AimAt(PlayerTank->GetActorLocation());
+	if (AimingComponent->FiringState == EFiringState::Locked)
+	{
+		AimingComponent->Fire();
+	}
+
 }
