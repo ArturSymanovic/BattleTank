@@ -20,12 +20,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
 
+	void DriveTrack();
+
 private:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void ApplySidewaysForce();
 
+	float CurrentThrottle = 0.f;
 
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 2000000.f;

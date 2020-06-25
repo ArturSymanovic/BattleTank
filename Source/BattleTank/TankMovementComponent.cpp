@@ -17,14 +17,14 @@ void UTankMovementComponent::IntendMoveBackward(float Throw)
 
 void UTankMovementComponent::IntendTurnRight(float Throw)
 {
-	LeftTrack->SetThrottle(0.5f *Throw);
-	RightTrack->SetThrottle(-0.5f * Throw);
+	LeftTrack->SetThrottle(Throw);
+	RightTrack->SetThrottle(-Throw);
 }
 
 void UTankMovementComponent::IntendTurnLeft(float Throw)
 {
-	LeftTrack->SetThrottle(-0.5f * Throw);
-	RightTrack->SetThrottle(0.5f * Throw);
+	LeftTrack->SetThrottle(-Throw);
+	RightTrack->SetThrottle(Throw);
 }
 
 void UTankMovementComponent::InitialiseTracks(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
