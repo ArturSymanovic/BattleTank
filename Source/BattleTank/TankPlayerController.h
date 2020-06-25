@@ -4,7 +4,6 @@
 
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
-#include "Tank.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
@@ -20,11 +19,10 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 protected:
-	UFUNCTION(BlueprintCallable)
-	ATank* GetControlledTank();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimingComponent(UTankAimingComponent* AimingComponentRef);
+
 public:
 	
 	virtual void BeginPlay() override;
@@ -33,7 +31,7 @@ public:
 	bool GetSightRayHitLocation(FVector& HitLocation);
 
 private:
-	ATank* ControlledTank;
+	APawn* ControlledTank;
 	UPROPERTY(EditAnywhere)
 	float CrosshairLocationX = 0.5f;
 	UPROPERTY(EditAnywhere)

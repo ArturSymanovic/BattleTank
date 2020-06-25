@@ -1,6 +1,6 @@
 // Copyright Artur Symanovic 2020
 
-#include <CollisionQueryParams.h>
+#include "CollisionQueryParams.h"
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
@@ -8,8 +8,8 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	ControlledTank = GetControlledTank();
-	auto AimingComponent = ControlledTank->FindComponentByClass <UTankAimingComponent>();
+
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (ensureMsgf(AimingComponent, TEXT("Aiming component not found")))
 	{
 		FoundAimingComponent(AimingComponent);
@@ -22,17 +22,15 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimAtCrosshair();
 }
 
-ATank* ATankPlayerController::GetControlledTank()
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimAtCrosshair()
 {
-	if (!ensureMsgf(ControlledTank, TEXT("Aiming component not found"))) { return; }
 	FVector HitLocation;
 	GetSightRayHitLocation(HitLocation);
-	ControlledTank->AimAt(HitLocation);
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (ensureMsgf(AimingComponent, TEXT("Aiming component not found")))
+	{
+		AimingComponent->AimAt(HitLocation);
+	}
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)

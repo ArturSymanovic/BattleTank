@@ -1,5 +1,6 @@
 // Copyright Artur Symanovic 2020
 
+#include "TankAimingComponent.h"
 #include "TankAIController.h"
 
 void ATankAIController::BeginPlay()
@@ -11,12 +12,13 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto ControlledTank = GetPawn<ATank>();
+	auto ControlledTank = GetPawn();
+	if (!ensureMsgf(ControlledTank, TEXT("%s: Controlled tank not found"), *GetName())) { return; }
 
-	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn<ATank>();
+	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!ensureMsgf(PlayerTank, TEXT("%s: Player tank not found"), *GetName())) { return; }
 
-	auto PathResult = MoveToActor(
+	MoveToActor(
 		PlayerTank,
 		AcceptanceRadius,
 		true,
@@ -25,7 +27,10 @@ void ATankAIController::Tick(float DeltaTime)
 		0,
 		true
 	);
+	
+	auto AimingCpmponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	if (!ensureMsgf(AimingCpmponent, TEXT("%s: Aiming component not found"), *GetName())) { return; }
 
-	ControlledTank->AimAt(PlayerTank->GetActorLocation());
-	ControlledTank->Fire();
+	AimingCpmponent->AimAt(PlayerTank->GetActorLocation());
+	AimingCpmponent->Fire();
 }
