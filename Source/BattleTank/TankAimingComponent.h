@@ -31,15 +31,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Fire();
 
-	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringState FiringState = EFiringState::Reloading;
-
 	bool IsBarrelMoving();
 
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringState FiringState = EFiringState::Reloading;
 
 public:	
 
@@ -48,6 +48,9 @@ public:
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	EFiringState GetFiringState() const;
+
 
 private:
 	UTankBarrel* Barrel = nullptr;
@@ -67,4 +70,6 @@ private:
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	FVector AimDirection = FVector{0.f};
+
+
 };

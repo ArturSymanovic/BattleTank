@@ -32,7 +32,7 @@ void ATankAIController::Tick(float DeltaTime)
 	if (!ensureMsgf(AimingComponent, TEXT("%s: Aiming component not found"), *GetName())) { return; }
 
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
-	if (AimingComponent->FiringState == EFiringState::Locked)
+	if (AimingComponent->GetFiringState() == EFiringState::Locked)
 	{
 		AimingComponent->Fire();
 	}
