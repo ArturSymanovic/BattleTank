@@ -11,7 +11,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -40,6 +41,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Reloading;
+
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	int32 AmmoCount = 3;
 
 public:	
 
@@ -70,6 +74,7 @@ private:
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	FVector AimDirection = FVector{0.f};
+
 
 
 };
