@@ -38,4 +38,10 @@ private:
 	float CrosshairLocationY = 0.33333f;
 	UPROPERTY(EditAnywhere)
 	float AimingRange = 1000000.f;
+
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
 };

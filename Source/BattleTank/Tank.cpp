@@ -10,7 +10,7 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-float ATank::GetHealthPercent() const
+float ATank::GetHealthPercent()
 {
 	return (float)CurrentHealth / (float)StartingHealth;
 }
@@ -18,7 +18,7 @@ float ATank::GetHealthPercent() const
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();
 }
 
 // Called every frame
@@ -34,6 +34,10 @@ float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEve
 	UE_LOG(LogTemp, Warning, TEXT("Damage Amount: %f"), DamageAmount);
 	UE_LOG(LogTemp, Warning, TEXT("Damage To Apply: %i"), DamageToApply);
 	CurrentHealth -= (int32)DamageToApply;
+	if (CurrentHealth == 0)
+	{
+		OnDeath.Broadcast();
+	}
 	return DamageToApply;
 }
 

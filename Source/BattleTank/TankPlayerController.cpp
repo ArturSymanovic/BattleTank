@@ -1,5 +1,5 @@
 // Copyright Artur Symanovic 2020
-
+#include "Tank.h"
 #include "CollisionQueryParams.h"
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
@@ -77,4 +77,18 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
 		HitLocation = HitResult.Location;
 	}
 	return IsHit;
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (!ensureMsgf(InPawn, TEXT("Pawn is null"))) { return; }
+	ATank* InTank = Cast<ATank>(InPawn);
+	if (!ensureMsgf(InTank, TEXT("Tank is null"))) { return; }
+	InTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+}
+
+void ATankPlayerController::OnTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Successful delegate creation!"));
 }

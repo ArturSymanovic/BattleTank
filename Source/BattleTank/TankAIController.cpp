@@ -1,5 +1,6 @@
 // Copyright Artur Symanovic 2020
-
+#include "Tank.h"
+#include "Delegates/DelegateSignatureImpl.inl"
 #include "TankAimingComponent.h"
 #include "TankAIController.h"
 
@@ -37,4 +38,19 @@ void ATankAIController::Tick(float DeltaTime)
 		AimingComponent->Fire();
 	}
 
+}
+
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (!ensureMsgf(InPawn, TEXT("Pawn is null"))) { return; }
+	ATank* InTank = Cast<ATank>(InPawn);
+	if (!ensureMsgf(InTank, TEXT("Tank is null"))) { return; }
+	InTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+
+}
+
+void ATankAIController::OnTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Successful delegate creation!"));
 }

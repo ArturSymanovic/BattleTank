@@ -20,4 +20,11 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float AcceptanceRadius = 8000.f;
+
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
+
 };
