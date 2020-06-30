@@ -30,6 +30,9 @@ protected:
 		const FHitResult& Hit
 	);
 
+	UFUNCTION()
+	void DisposeProjectile();
+
 public:	
 	void LaunchProjectile(float Speed);
 
@@ -48,5 +51,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	URadialForceComponent* ExplosionForce = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DestoyDelay = 1.0f;
 
 };

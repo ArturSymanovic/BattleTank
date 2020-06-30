@@ -48,6 +48,17 @@ void AProjectile::OnHit(
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	ExplosionForce->FireImpulse();
+	SetRootComponent(ImpactBlast);
+	CollisionMesh->DestroyComponent();
+
+	FTimerHandle Handle = FTimerHandle();
+	GetWorld()->GetTimerManager().SetTimer(Handle, this, &AProjectile::DisposeProjectile, 1.f, false, DestoyDelay);
+
+}
+
+void AProjectile::DisposeProjectile()
+{
+	this->Destroy();
 }
 
 void AProjectile::LaunchProjectile(float Speed)
