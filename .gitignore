@@ -1,9 +1,6 @@
 #Main menu background image
 Content/UI/TankFiring.uasset
 
-# Starter Content and Imported Tank
-Content/StarterContent/
-
 # Visual Studio 2015 user specific files
 .vs/
 
