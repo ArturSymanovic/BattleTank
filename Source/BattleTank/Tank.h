@@ -16,6 +16,9 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetHealthPercent() const;
+
 private:	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
