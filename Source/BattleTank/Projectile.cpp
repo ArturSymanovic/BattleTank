@@ -1,5 +1,6 @@
 // Copyright Artur Symanovic 2020
 
+#include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Projectile.h"
@@ -50,6 +51,16 @@ void AProjectile::OnHit(
 	ExplosionForce->FireImpulse();
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
+
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius,
+		UDamageType::StaticClass(),
+		TArray<AActor*>() //damage all actors
+	);
+
 
 	FTimerHandle Handle = FTimerHandle();
 	GetWorld()->GetTimerManager().SetTimer(Handle, this, &AProjectile::DisposeProjectile, 1.f, false, DestoyDelay);
